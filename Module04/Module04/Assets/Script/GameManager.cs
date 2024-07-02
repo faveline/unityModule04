@@ -28,12 +28,19 @@ public class GameManager : MonoBehaviour
 	private Animator	animPlayer;
 	public bool			alive;
 	public bool			toBlack;
+	public GameObject	leaf;
+	private float		moveTime;
+	private float		nextMove;
+	private Vector3		moveLeaf;
 
 	void Start() {
-		alive = true;
 		playerHPMax = playerHP;
 		vectCamera = new Vector3(0, 2, -5);
 		animPlayer = player.transform.GetChild(0).GetComponent<Animator>();
+		leaf.transform.position = new Vector3(Random.Range(-7f, 14f), 10, 0);
+		moveTime = 0.001f;
+		nextMove = 0f;
+		moveLeaf = new Vector3(0, 0.06f, 0);
 	}
 
 	void Update() {
@@ -42,6 +49,12 @@ public class GameManager : MonoBehaviour
 			toBlack = false;
 			camera.transform.GetChild(0).GetComponent<Animator>().SetTrigger("toBlack");
 		}
+		if (Time.time < nextMove)
+			return;
+		nextMove = Time.time + moveTime;
+		leaf.transform.position -= moveLeaf;
+		if (leaf.transform.position.y < -4f)
+			leaf.transform.position = new Vector3(Random.Range(-7f, 14f), 10, 0);
 	}
 
 	public void	atkPlayer(int atk) {

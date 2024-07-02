@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
 	private SpriteRenderer	sRender;
 	private Vector3			sauvPos;
 	private Vector3			posIni;
+	private float			invulnerability;
+	private float			invulTime;
 
     void Start()
     {
@@ -22,6 +24,8 @@ public class Player : MonoBehaviour
 		sRender = transform.GetChild(0).GetComponent<SpriteRenderer>();
 		sauvPos = transform.GetChild(0).transform.position;
 		posIni = transform.position;
+		invulnerability = 2f;
+		invulTime = 0f;
     }
 
     void Update()
@@ -64,8 +68,9 @@ public class Player : MonoBehaviour
 		}
 		if (!GameManager.Instance.alive)
 			return;		
-		if (other.gameObject.layer == 7) {
+		if (other.gameObject.layer == 7 && Time.time > invulTime) {
 			GameManager.Instance.atkPlayer(1);
+			invulTime = Time.time + invulnerability;
 		}
  	}
 
